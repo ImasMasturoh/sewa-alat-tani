@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="p-4 lg:p-8 space-y-4 animate-fade-in">
-    <!-- TAB DASHBOARD -->
     <div id="tab-dashboard" class="tab-content space-y-8">
         <div>
             <h2 class="text-3xl font-black text-slate-900 tracking-tight">Halo, Admin Desa!</h2>
@@ -13,23 +12,21 @@
         @include('admin.partials.dashboard')
     </div>
 
-    <!-- TAB INVENTARIS -->
     <div id="tab-data-alat" class="tab-content hidden space-y-6">
         @include('admin.partials.data-alat')
     </div>
 
-    <!-- TAB VERIFIKASI -->
     <div id="tab-data-pinjam" class="tab-content hidden space-y-6">
         @include('admin.partials.data-pinjam')
     </div>
 </div>
 
-<!-- MODAL CRUD -->
 @include('admin.partials.modal-crud')
 @endsection
 
 @push('scripts')
 <script>
+    // FUNGSI NAVIGASI TAB
     function pindahTab(namaTab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         const target = document.getElementById('tab-' + namaTab);
@@ -45,27 +42,41 @@
             btnAktif.classList.add('bg-emerald-50', 'text-emerald-600', 'shadow-sm', 'border', 'border-emerald-100');
             btnAktif.classList.remove('text-slate-400');
         }
+
+        // Otomatis tutup sidebar di mobile setelah pilih menu
+        if (window.innerWidth < 1024 && window.closeSidebar) {
+            window.closeSidebar();
+        }
     }
 
-
+    // FUNGSI TAMBAH (Sinkronisasi ID dengan modal-crud)
     function prepareTambah() {
         const modal = document.getElementById('modal-crud');
         const form = document.getElementById('form-alat');
+        
         document.getElementById('modal-title').innerText = 'Tambah Inventaris Baru';
-        document.getElementById('method-field').innerHTML = '';
+        document.getElementById('method-field').innerHTML = ''; // Method POST default
+        
         form.action = "{{ route('admin.alat.simpan') }}";
         form.reset();
+        
+        // Memastikan modal muncul dengan flex (agar center)
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
 
+    // FUNGSI EDIT (Sinkronisasi ID dengan modal-crud)
     function prepareEdit(btn) {
         const modal = document.getElementById('modal-crud');
         const form = document.getElementById('form-alat');
         
         document.getElementById('modal-title').innerText = 'Edit Inventaris Alat';
         form.action = `/admin/alat/${btn.dataset.id}`;
+        
+        // Gunakan @method('PUT') versi HTML
         document.getElementById('method-field').innerHTML = '<input type="hidden" name="_method" value="PUT">';
         
+        // Sesuai ID di modal-crud yang menggunakan tanda hubung (-)
         document.getElementById('input-nama').value = btn.dataset.nama;
         document.getElementById('input-harga').value = btn.dataset.harga;
         document.getElementById('input-stok').value = btn.dataset.stok;
@@ -73,10 +84,13 @@
         document.getElementById('input-kategori').value = btn.dataset.kategori;
         
         modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
 
     function tutupModal() {
-        document.getElementById('modal-crud').classList.add('hidden');
+        const modal = document.getElementById('modal-crud');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 
     function konfirmasiHapus(id, nama) {
@@ -85,7 +99,10 @@
         }
     }
 
+    // Jalankan dashboard saat pertama dimuat
     document.addEventListener('DOMContentLoaded', () => pindahTab('dashboard'));
+
+    // Close modal saat klik area luar
     window.onclick = function(event) {
         const modal = document.getElementById('modal-crud');
         if (event.target == modal) tutupModal();

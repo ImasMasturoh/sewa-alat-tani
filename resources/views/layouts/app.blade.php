@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'TaniSewa - Portal Warga')</title>
+    <title>@yield('title', 'TaniSewa - Portal Desa')</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -16,11 +16,20 @@
             background-color: #f8fafc;
         }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        
+        /* Animasi Transisi Tab */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 
     @stack('styles')
 </head>
 <body class="min-h-screen bg-[#f8fafc]">
+
 <button
     id="btnSidebar"
     class="lg:hidden fixed top-3 left-4 z-[70] 
@@ -31,7 +40,7 @@
 
 <div
     id="sidebarOverlay"
-    class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden">
+    class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[55] lg:hidden">
 </div>
 
 @include('partials.header')
@@ -47,7 +56,7 @@
     </aside>
 
     <main class="flex-1 flex flex-col min-w-0">
-        <div class="p-4 pt-24 lg:pt-8 lg:p-8 flex-1">
+        <div class="p-4 pt-24 lg:pt-8 lg:p-10 flex-1">
             @yield('content')
         </div>
 
@@ -68,9 +77,46 @@
 </div>
 
 @include('warga.partials.modal-sewa')
+@yield('modals')
 
 <script>
-    window.openModal = function(id = 'modalAlat') {
+    /** * 1. FUNGSI NAVIGASI TAB GLOBAL
+     */
+    window.pindahTab = function(namaTab) {
+        // Sembunyikan semua tab
+        document.querySelectorAll('.tab-content').forEach(el => {
+            el.style.display = 'none';
+            el.classList.remove('active');
+        });
+
+        // Tampilkan tab target
+        const target = document.getElementById('tab-' + namaTab);
+        if (target) {
+            target.style.display = 'block';
+            target.classList.add('active');
+        }
+
+        // Reset styling semua tombol navigasi
+        document.querySelectorAll('.nav-item').forEach(btn => {
+            btn.classList.remove('bg-emerald-50', 'text-emerald-600', 'border', 'border-emerald-100', 'shadow-sm');
+            btn.classList.add('text-slate-400');
+        });
+
+        // Aktifkan tombol yang diklik
+        const btnAktif = document.getElementById('nav-' + namaTab);
+        if (btnAktif) {
+            btnAktif.classList.add('bg-emerald-50', 'text-emerald-600', 'border', 'border-emerald-100', 'shadow-sm');
+            btnAktif.classList.remove('text-slate-400');
+        }
+
+        // Tutup sidebar jika di mobile
+        if (window.innerWidth < 1024) closeSidebar();
+    }
+
+    /**
+     * 2. FUNGSI MODAL GLOBAL (Sinkron dengan ID Tanda Hubung)
+     */
+    window.openModal = function(id = 'modal-crud') {
         const modal = document.getElementById(id);
         if (modal) {
             modal.classList.remove('hidden');
@@ -79,7 +125,7 @@
         }
     }
 
-    window.closeModal = function(id = 'modalAlat') {
+    window.closeModal = function(id = 'modal-crud') {
         const modal = document.getElementById(id);
         if (modal) {
             modal.classList.add('hidden');
@@ -87,50 +133,37 @@
             document.body.style.overflow = 'auto'; 
         }
     }
-    window.prepareTambah = function() {
-        const form = document.getElementById('formAlat');
-        const title = document.getElementById('modalTitle');
-        const methodField = document.getElementById('methodField');
 
-        if (form && title) {
-            form.reset();
-            form.action = "{{ route('admin.alat.simpan') }}"; 
-            if(methodField) methodField.innerHTML = ''; 
-            title.innerText = 'Tambah Alat Baru';
-            openModal('modalAlat');
-        }
+    /**
+     * 3. LOGIKA SIDEBAR
+     */
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    window.openSidebar = function() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeSidebar = function() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        if (window.lucide) {
-            lucide.createIcons();
-        }
-        const sidebar = document.getElementById('sidebar');
-        const openBtn = document.getElementById('btnSidebar');
-        const overlay = document.getElementById('sidebarOverlay');
+        if (window.lucide) lucide.createIcons();
 
-        function openSidebar() {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSidebar() {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        openBtn?.addEventListener('click', (e) => {
+        document.getElementById('btnSidebar')?.addEventListener('click', (e) => {
             e.stopPropagation();
             openSidebar();
         });
 
         overlay?.addEventListener('click', closeSidebar);
+
         document.addEventListener('click', (e) => {
-            if (e.target.closest('#btnCloseSidebar')) {
-                closeSidebar();
-            }
+            if (e.target.closest('#btnCloseSidebar')) closeSidebar();
         });
     });
 </script>
