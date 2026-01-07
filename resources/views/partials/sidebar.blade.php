@@ -14,21 +14,22 @@
             </p>
 
             <div class="space-y-2">
-                <button id="nav-dashboard" onclick="pindahTab('dashboard')"
+                <button onclick="pindahTab('dashboard')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
-                           font-bold text-sm bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
+                           font-bold text-sm text-slate-400 hover:bg-slate-50">
                     <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                     Statistik
                 </button>
 
-                <button id="nav-data-alat" onclick="pindahTab('data-alat')"
+                <button onclick="pindahTab('data-alat')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
-                           font-bold text-sm text-slate-400 hover:bg-slate-50">
+                           font-bold text-sm bg-emerald-50 text-emerald-600
+                           border border-emerald-100">
                     <i data-lucide="package" class="w-5 h-5"></i>
                     Inventaris
                 </button>
 
-                <button id="nav-data-pinjam" onclick="pindahTab('data-pinjam')"
+                <button onclick="pindahTab('data-pinjam')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
                            font-bold text-sm text-slate-400 hover:bg-slate-50">
                     <i data-lucide="check-square" class="w-5 h-5"></i>
@@ -45,28 +46,29 @@
             </p>
 
             <div class="space-y-2">
-                <button id="nav-dashboard" onclick="pindahTab('dashboard')"
+                <button onclick="pindahTab('dashboard')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
-                           font-bold text-sm bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
+                           font-bold text-sm bg-emerald-50 text-emerald-600
+                           border border-emerald-100">
                     <i data-lucide="layout-grid" class="w-5 h-5"></i>
                     Ringkasan
                 </button>
 
-                <button id="nav-katalog" onclick="pindahTab('katalog')"
+                <button onclick="pindahTab('katalog')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
                            font-bold text-sm text-slate-400 hover:bg-slate-50">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                     Katalog Alat
                 </button>
 
-                <button id="nav-pinjaman" onclick="pindahTab('pinjaman')"
+                <button onclick="pindahTab('pinjaman')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
                            font-bold text-sm text-slate-400 hover:bg-slate-50">
                     <i data-lucide="calendar" class="w-5 h-5"></i>
                     Pinjamanku
                 </button>
 
-                <button id="nav-riwayat" onclick="pindahTab('riwayat')"
+                <button onclick="pindahTab('riwayat')"
                     class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl
                            font-bold text-sm text-slate-400 hover:bg-slate-50">
                     <i data-lucide="history" class="w-5 h-5"></i>
