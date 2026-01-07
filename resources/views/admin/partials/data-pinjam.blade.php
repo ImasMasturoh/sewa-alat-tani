@@ -15,7 +15,7 @@
                 <tr class="hover:bg-slate-50 transition-colors">
                     <td class="px-8 py-5">
                         <p class="font-black text-slate-900 leading-none mb-1">{{ $sewa->nama_peminjam }}</p>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">{{ $sewa->alat->nama }}</p>
+                       <p class="text-[10px] text-slate-400 font-bold uppercase">{{ $sewa->alat?->nama ?? 'Alat dihapus' }}</p>
                     </td>
                     <td class="px-8 py-5 font-black text-emerald-600">
                         Rp {{ number_format($sewa->total, 0, ',', '.') }}
