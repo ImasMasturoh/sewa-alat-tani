@@ -1,52 +1,66 @@
-<aside class="w-72 border-r border-slate-100 min-h-screen p-8 bg-white hidden lg:block sticky top-0">
-    <nav class="space-y-10">
-        <!-- MENU ADMIN  -->
-        @if(request()->routeIs('admin.*'))
-        <div>
-            <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-6 px-4">Menu Navigasi</p>
-            <div class="space-y-2">
-                <button onclick="pindahTab('dashboard')" id="nav-dashboard" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm transition-all text-slate-400 hover:bg-slate-50">
-                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Statistik
-                </button>
+<aside
+    id="sidebar"
+    class="fixed lg:sticky inset-y-0 left-0 z-40
+           w-72 min-h-screen p-8 bg-white
+           border-r border-slate-100
+           transform -translate-x-full lg:translate-x-0
+           transition-transform duration-300"
+>
+<button
+    id="btnCloseSidebar"
+    class="lg:hidden absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+    <i data-lucide="x" class="w-5 h-5"></i>
+</button>
 
-                <button onclick="pindahTab('data-alat')" id="nav-data-alat" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm bg-emerald-50 text-emerald-600 shadow-sm border border-emerald-100">
-                    <i data-lucide="package" class="w-5 h-5"></i> Inventaris
-                </button>
+<nav class="space-y-10 mt-8">
 
-                <button onclick="pindahTab('data-pinjam')" id="nav-data-pinjam" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50 transition-all">
-                    <i data-lucide="check-square" class="w-5 h-5"></i> Verifikasi
-                </button>
-            </div>
+    <!-- Admin -->
+    @if(request()->routeIs('admin.*'))
+    <div>
+        <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-6 px-4">
+            Menu Navigasi
+        </p>
+        <div class="space-y-2">
+            <button onclick="pindahTab('dashboard')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Statistik
+            </button>
+
+            <button onclick="pindahTab('data-alat')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm bg-emerald-50 text-emerald-600 border border-emerald-100">
+                <i data-lucide="package" class="w-5 h-5"></i> Inventaris
+            </button>
+
+            <button onclick="pindahTab('data-pinjam')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50">
+                <i data-lucide="check-square" class="w-5 h-5"></i> Verifikasi
+            </button>
         </div>
-        @endif
+    </div>
+    @endif
 
-        <!-- MENU WARGA  -->
-        @if(request()->routeIs('warga.*'))
-        <div>
-            <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-6 px-4">Menu Navigasi</p>
-            <div class="space-y-2">
-                <button onclick="pindahTab('dashboard')" id="nav-dashboard" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm bg-emerald-50 text-emerald-600 shadow-sm border border-emerald-100">
-                    <i data-lucide="layout-grid" class="w-5 h-5"></i> Ringkasan
-                </button>
-                <button onclick="pindahTab('katalog')" id="nav-katalog" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50 transition-all">
-                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> Katalog Alat
-                </button>
-                </button>
-                <button onclick="pindahTab('pinjaman')" id="nav-pinjaman" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50 transition-all">
-                    <i data-lucide="calendar" class="w-5 h-5"></i> Pinjamanku
-                </button>
-                <button onclick="pindahTab('riwayat')" id="nav-riwayat" 
-                    class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50 transition-all">
-                    <i data-lucide="history" class="w-5 h-5"></i> Riwayat Sewa
-                </button>
-            </div>
+   <!-- Warga -->
+    @if(request()->routeIs('warga.*'))
+    <div>
+        <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-6 px-4">
+            Menu Navigasi
+        </p>
+        <div class="space-y-2">
+            <button onclick="pindahTab('dashboard')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm bg-emerald-50 text-emerald-600 border border-emerald-100">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> Ringkasan
+            </button>
+
+            <button onclick="pindahTab('katalog')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Katalog Alat
+            </button>
+
+            <button onclick="pindahTab('pinjaman')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50">
+                <i data-lucide="calendar" class="w-5 h-5"></i> Pinjamanku
+            </button>
+
+            <button onclick="pindahTab('riwayat')" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold text-sm text-slate-400 hover:bg-slate-50">
+                <i data-lucide="history" class="w-5 h-5"></i> Riwayat Sewa
+            </button>
         </div>
-        @endif
-    </nav>
+    </div>
+    @endif
+
+</nav>
 </aside>

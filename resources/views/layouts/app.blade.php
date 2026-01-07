@@ -9,54 +9,87 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8fafc; 
-        }
-        [x-cloak] { display: none !important; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+
     @stack('styles')
 </head>
 <body class="min-h-screen flex flex-col">
 
-    @include('partials.header')
+<!-- BUTTON HAMBURGER (MOBILE) -->
+<button
+    id="btnSidebar"
+    class="lg:hidden fixed top-4 left-4 z-50
+           bg-emerald-600 text-white p-3 rounded-xl shadow-lg">
+    <i data-lucide="menu" class="w-5 h-5"></i>
+</button>
 
-    <div class="flex flex-1 w-full overflow-hidden">
-        
-        @include('partials.sidebar')
+<!-- OVERLAY -->
+<div
+    id="sidebarOverlay"
+    class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden">
+</div>
 
-        <main class="flex-1 flex flex-col min-w-0 bg-[#f8fafc] overflow-y-auto">
-            <div class="p-2 lg:p-6 flex-1">
-                @yield('content')
-            </div>
+@include('partials.header')
 
-            <footer class="py-12 border-t border-slate-100 bg-white">
-                <div class="text-center">
-                    <div class="flex items-center justify-center gap-2 mb-3">
-                        <i data-lucide="tractor" class="w-5 h-5 text-slate-300"></i>
-                        <span class="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">TaniSewa Digital Desa</span>
-                    </div>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em]">
-                        Portal Layanan Peminjaman Alat untuk Warga dan Bumdes Desa © 2026
-                    </p>
+<div class="flex flex-1 w-full overflow-hidden">
+
+    @include('partials.sidebar')
+
+    <main class="flex-1 flex flex-col min-w-0 bg-[#f8fafc] overflow-y-auto">
+        <div class="p-2 lg:p-6 flex-1">
+            @yield('content')
+        </div>
+
+        <footer class="py-12 border-t border-slate-100 bg-white">
+            <div class="text-center">
+                <div class="flex items-center justify-center gap-2 mb-3">
+                    <i data-lucide="tractor" class="w-5 h-5 text-slate-300"></i>
+                    <span class="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">
+                        TaniSewa Digital Desa
+                    </span>
                 </div>
-            </footer>
-        </main>
-    </div>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em]">
+                    Portal Layanan Peminjaman Alat © 2026
+                </p>
+            </div>
+        </footer>
+    </main>
+</div>
 
-    @include('warga.partials.modal-sewa')
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
-    </script>
-    @stack('scripts')
+@include('warga.partials.modal-sewa')
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+
+    const sidebar = document.getElementById('sidebar');
+    const openBtn = document.getElementById('btnSidebar');
+    const closeBtn = document.getElementById('btnCloseSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+
+    openBtn?.addEventListener('click', openSidebar);
+    closeBtn?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+});
+</script>
+
+@stack('scripts')
 </body>
 </html>
