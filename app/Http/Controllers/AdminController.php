@@ -6,6 +6,7 @@ use App\Models\Alat;
 use App\Models\Kategori;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -52,15 +53,6 @@ class AdminController extends Controller
             'harga'       => 'required|numeric|min:0',
             'stok'        => 'required|integer|min:0',
             'emoji'       => 'required|string|max:10',
-        ], [
-            'nama.required'        => 'Nama alat harus diisi',
-            'kategori_id.required' => 'Kategori harus dipilih',
-            'kategori_id.exists'   => 'Kategori tidak ditemukan',
-            'harga.required'       => 'Harga harus diisi',
-            'harga.min'            => 'Harga tidak boleh negatif',
-            'stok.required'        => 'Stok harus diisi',
-            'stok.min'             => 'Stok tidak boleh negatif',
-            'emoji.required'       => 'Emoji harus diisi',
         ]);
 
         $alat->update($validated);
@@ -83,12 +75,30 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'status' => 'required|in:Pending,Dipinjam,Selesai',
-        ], [
-            'status.required' => 'Status harus diisi',
-            'status.in'       => 'Status tidak valid',
         ]);
 
-        $peminjaman->update($validated);
+        DB::transaction(function () use ($validated, $peminjaman) {
+            $statusLama = $peminjaman->status;
+            $statusBaru = $validated['status'];
+            $alat = $peminjaman->alat;
+
+            // Saat dikonfirmasi dipinjam → kurangi stok
+            if ($statusLama === 'Pending' && $statusBaru === 'Dipinjam') {
+                if ($alat->stok < 1) {
+                    abort(400, 'Stok alat habis');
+                }
+                $alat->decrement('stok');
+            }
+
+            // Saat selesai → kembalikan stok
+            if ($statusLama === 'Dipinjam' && $statusBaru === 'Selesai') {
+                $alat->increment('stok');
+            }
+
+            $peminjaman->update([
+                'status' => $statusBaru
+            ]);
+        });
 
         return redirect()
             ->route('admin.index')

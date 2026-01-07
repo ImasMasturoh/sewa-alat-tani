@@ -19,30 +19,32 @@ class WargaController extends Controller
     }
 
     public function simpanPeminjaman(Request $request)
-    {
-        $validated = $request->validate([
-            'nama_peminjam',
-            'rt_peminjam',
-            'alat_id',
-            'tanggal_pinjam',
-            'durasi'
-        ], [
-            'nama_peminjam.required' => 'Nama peminjam harus diisi',
-            'rt_peminjam.required' => 'RT peminjam harus diisi',
-            'alat_id.required' => 'Alat harus dipilih',
-            'alat_id.exists' => 'Alat tidak ditemukan',
-            'tanggal_pinjam.required' => 'Tanggal pinjam harus diisi',
-            'tanggal_pinjam.date' => 'Format tanggal tidak valid',
-            'durasi.required' => 'Durasi harus diisi',
-            'durasi.min' => 'Durasi minimal 1 hari'
-        ]);
+{
+    $validated = $request->validate([
+        'nama_peminjam' => 'required|string',
+        'rt_peminjam' => 'required|string',
+        'alat_id' => 'required|exists:alat,id',
+        'tanggal_pinjam' => 'required|date',
+        'durasi' => 'required|integer|min:1',
+    ], [
+        'nama_peminjam.required' => 'Nama peminjam harus diisi',
+        'rt_peminjam.required' => 'RT peminjam harus diisi',
+        'alat_id.required' => 'Alat harus dipilih',
+        'alat_id.exists' => 'Alat tidak ditemukan',
+        'tanggal_pinjam.required' => 'Tanggal pinjam harus diisi',
+        'tanggal_pinjam.date' => 'Format tanggal tidak valid',
+        'durasi.required' => 'Durasi harus diisi',
+        'durasi.min' => 'Durasi minimal 1 hari'
+    ]);
 
-        $alat = Alat::findOrFail($validated['alat_id']);
-        $validated['total'] = $alat->harga * $validated['durasi'];
-        $validated['status'] = 'Pending';
+    $alat = Alat::findOrFail($validated['alat_id']);
 
-        Peminjaman::create($validated);
+    $validated['total'] = $alat->harga * $validated['durasi'];
+    $validated['status'] = 'Pending';
 
-        return redirect()->route('warga.index')->with('sukses', 'Peminjaman berhasil diajukan!');
-    }
+    Peminjaman::create($validated);
+
+    return redirect()->route('warga.index')
+        ->with('sukses', 'Peminjaman berhasil diajukan!');
+}
 }
