@@ -23,9 +23,9 @@
 <!--HAMBURGER -->
 <button
     id="btnSidebar"
-    class="lg:hidden fixed top-4 left-4 z-50
+    class="md:hidden fixed top-4 left-4 z-50
            bg-emerald-600 text-white p-3 rounded-xl shadow-lg">
-    <i data-lucide="menu" class="w-5 h-5"></i>
+    ☰
 </button>
 <div
     id="sidebarOverlay"
