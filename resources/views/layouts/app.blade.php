@@ -9,28 +9,24 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
         }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
 
     @stack('styles')
 </head>
 <body class="min-h-screen flex flex-col">
 
-<!-- BUTTON HAMBURGER (MOBILE) -->
+<!--HAMBURGER -->
 <button
     id="btnSidebar"
     class="lg:hidden fixed top-4 left-4 z-50
            bg-emerald-600 text-white p-3 rounded-xl shadow-lg">
     <i data-lucide="menu" class="w-5 h-5"></i>
 </button>
-
-<!-- OVERLAY -->
 <div
     id="sidebarOverlay"
     class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden">
@@ -39,11 +35,24 @@
 @include('partials.header')
 
 <div class="flex flex-1 w-full overflow-hidden">
+    <aside
+        id="sidebar"
+        class="fixed lg:static z-40
+               w-72 min-h-screen bg-white border-r border-slate-100
+               transform -translate-x-full lg:translate-x-0
+               transition-transform duration-300 ease-in-out">
+        <div class="lg:hidden flex justify-end p-4">
+            <button id="btnCloseSidebar"
+                class="p-2 rounded-lg hover:bg-slate-100">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
 
-    @include('partials.sidebar')
+        @include('partials.sidebar')
+    </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 bg-[#f8fafc] overflow-y-auto">
-        <div class="p-2 lg:p-6 flex-1">
+    <main class="flex-1 flex flex-col bg-[#f8fafc] overflow-y-auto">
+        <div class="p-3 lg:p-6 flex-1">
             @yield('content')
         </div>
 
