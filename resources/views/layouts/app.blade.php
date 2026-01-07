@@ -17,27 +17,27 @@
     </style>
     @stack('styles')
 </head>
-<body class="min-h-screen flex flex-col">
+<<body class="min-h-screen bg-[#f8fafc]">
 
 <button
     id="btnSidebar"
-    class="lg:hidden fixed top-4 left-4 z-50
-           bg-emerald-600 text-white w-12 h-12 rounded-xl shadow-lg
-           flex items-center justify-center text-2xl font-bold transition-transform active:scale-90">
-    ☰
+    class="lg:hidden fixed top-4 left-4 z-[60]
+           bg-emerald-600 text-white w-12 h-12 rounded-xl shadow-2xl
+           flex items-center justify-center text-3xl font-bold active:scale-95 transition-all">
+    =
 </button>
 
 <div
     id="sidebarOverlay"
-    class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 lg:hidden">
+    class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden">
 </div>
 
 @include('partials.header')
 
-<div class="flex flex-1 w-full overflow-hidden">
+<div class="flex min-h-screen">
     <aside
         id="sidebar"
-        class="fixed lg:sticky top-0 left-0 z-40
+        class="fixed lg:sticky top-0 left-0 z-50
                w-72 h-screen bg-white border-r border-slate-100
                transform -translate-x-full lg:translate-x-0
                transition-transform duration-300 ease-in-out overflow-y-auto">
@@ -45,8 +45,8 @@
         @include('partials.sidebar')
     </aside>
 
-    <main class="flex-1 flex flex-col bg-[#f8fafc] overflow-y-auto">
-        <div class="p-4 lg:p-8 flex-1">
+    <main class="flex-1 flex flex-col min-w-0">
+        <div class="p-4 pt-20 lg:pt-8 lg:p-8 flex-1">
             @yield('content')
         </div>
 
@@ -79,19 +79,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function openSidebar() {
         sidebar.classList.remove('-translate-x-full');
         overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; 
     }
 
     function closeSidebar() {
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
-        document.body.style.overflow = 'auto';
     }
 
-    openBtn?.addEventListener('click', openSidebar);
+    // Klik tombol hamburger
+    openBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openSidebar();
+    });
+
+    // Klik overlay untuk menutup
     overlay?.addEventListener('click', closeSidebar);
 
-    // Event delegation untuk tombol close
+    // Klik tombol X di dalam sidebar (Event Delegation)
     document.addEventListener('click', (e) => {
         if (e.target.closest('#btnCloseSidebar')) {
             closeSidebar();
