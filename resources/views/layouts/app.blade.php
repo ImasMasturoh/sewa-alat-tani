@@ -15,21 +15,21 @@
         }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
-
     @stack('styles')
 </head>
 <body class="min-h-screen flex flex-col">
 
-<!--HAMBURGER -->
 <button
     id="btnSidebar"
-    class="md:hidden fixed top-4 left-4 z-50
-           bg-emerald-600 text-white p-3 rounded-xl shadow-lg">
+    class="lg:hidden fixed top-4 left-4 z-50
+           bg-emerald-600 text-white w-12 h-12 rounded-xl shadow-lg
+           flex items-center justify-center text-2xl font-bold transition-transform active:scale-90">
     ☰
 </button>
+
 <div
     id="sidebarOverlay"
-    class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden">
+    class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 lg:hidden">
 </div>
 
 @include('partials.header')
@@ -37,22 +37,16 @@
 <div class="flex flex-1 w-full overflow-hidden">
     <aside
         id="sidebar"
-        class="fixed lg:static z-40
-               w-72 min-h-screen bg-white border-r border-slate-100
+        class="fixed lg:sticky top-0 left-0 z-40
+               w-72 h-screen bg-white border-r border-slate-100
                transform -translate-x-full lg:translate-x-0
-               transition-transform duration-300 ease-in-out">
-        <div class="lg:hidden flex justify-end p-4">
-            <button id="btnCloseSidebar"
-                class="p-2 rounded-lg hover:bg-slate-100">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-        </div>
-
+               transition-transform duration-300 ease-in-out overflow-y-auto">
+        
         @include('partials.sidebar')
     </aside>
 
     <main class="flex-1 flex flex-col bg-[#f8fafc] overflow-y-auto">
-        <div class="p-3 lg:p-6 flex-1">
+        <div class="p-4 lg:p-8 flex-1">
             @yield('content')
         </div>
 
@@ -80,25 +74,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sidebar = document.getElementById('sidebar');
     const openBtn = document.getElementById('btnSidebar');
-    const closeBtn = document.getElementById('btnCloseSidebar');
     const overlay = document.getElementById('sidebarOverlay');
-
+    
     function openSidebar() {
         sidebar.classList.remove('-translate-x-full');
         overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; 
     }
 
     function closeSidebar() {
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
 
     openBtn?.addEventListener('click', openSidebar);
-    closeBtn?.addEventListener('click', closeSidebar);
     overlay?.addEventListener('click', closeSidebar);
+
+    // Event delegation untuk tombol close
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('#btnCloseSidebar')) {
+            closeSidebar();
+        }
+    });
 });
 </script>
 
 @stack('scripts')
 </body>
 </html>
+
+
