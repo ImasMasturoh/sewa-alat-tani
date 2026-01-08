@@ -26,7 +26,6 @@
 
 @push('scripts')
 <script>
-    // FUNGSI NAVIGASI TAB
     function pindahTab(namaTab) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         const target = document.getElementById('tab-' + namaTab);
@@ -42,30 +41,26 @@
             btnAktif.classList.add('bg-emerald-50', 'text-emerald-600', 'shadow-sm', 'border', 'border-emerald-100');
             btnAktif.classList.remove('text-slate-400');
         }
-
-        // Otomatis tutup sidebar di mobile setelah pilih menu
         if (window.innerWidth < 1024 && window.closeSidebar) {
             window.closeSidebar();
         }
     }
-
-    // FUNGSI TAMBAH (Sinkronisasi ID dengan modal-crud)
+    // FUNGSI TAMBAH
     function prepareTambah() {
         const modal = document.getElementById('modal-crud');
         const form = document.getElementById('form-alat');
         
         document.getElementById('modal-title').innerText = 'Tambah Inventaris Baru';
-        document.getElementById('method-field').innerHTML = ''; // Method POST default
+        document.getElementById('method-field').innerHTML = '';
         
         form.action = "{{ route('admin.alat.simpan') }}";
         form.reset();
         
-        // Memastikan modal muncul dengan flex (agar center)
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
-    // FUNGSI EDIT (Sinkronisasi ID dengan modal-crud)
+    // FUNGSI EDIT 
     function prepareEdit(btn) {
         const modal = document.getElementById('modal-crud');
         const form = document.getElementById('form-alat');
@@ -73,10 +68,8 @@
         document.getElementById('modal-title').innerText = 'Edit Inventaris Alat';
         form.action = `/admin/alat/${btn.dataset.id}`;
         
-        // Gunakan @method('PUT') versi HTML
+        // Gunakan @method('PUT') 
         document.getElementById('method-field').innerHTML = '<input type="hidden" name="_method" value="PUT">';
-        
-        // Sesuai ID di modal-crud yang menggunakan tanda hubung (-)
         document.getElementById('input-nama').value = btn.dataset.nama;
         document.getElementById('input-harga').value = btn.dataset.harga;
         document.getElementById('input-stok').value = btn.dataset.stok;
@@ -98,11 +91,7 @@
             document.getElementById(`form-hapus-${id}`).submit();
         }
     }
-
-    // Jalankan dashboard saat pertama dimuat
     document.addEventListener('DOMContentLoaded', () => pindahTab('dashboard'));
-
-    // Close modal saat klik area luar
     window.onclick = function(event) {
         const modal = document.getElementById('modal-crud');
         if (event.target == modal) tutupModal();

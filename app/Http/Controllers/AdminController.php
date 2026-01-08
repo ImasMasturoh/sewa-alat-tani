@@ -81,16 +81,12 @@ class AdminController extends Controller
             $statusLama = $peminjaman->status;
             $statusBaru = $validated['status'];
             $alat = $peminjaman->alat;
-
-            // Saat dikonfirmasi dipinjam → kurangi stok
             if ($statusLama === 'Pending' && $statusBaru === 'Dipinjam') {
                 if ($alat->stok < 1) {
                     abort(400, 'Stok alat habis');
                 }
                 $alat->decrement('stok');
             }
-
-            // Saat selesai → kembalikan stok
             if ($statusLama === 'Dipinjam' && $statusBaru === 'Selesai') {
                 $alat->increment('stok');
             }
